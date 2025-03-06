@@ -48,12 +48,12 @@ func main() {
 
 	// Definir o template no Gin
 	r.SetHTMLTemplate(templ)
-	r.GET("/", func(c *gin.Context) { //erro 404, not found
+	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{"tasks": tasks}) // index vai renderizar a pag principal
 	})
 
 	r.GET("/tasks", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "task.html", gin.H{"tasks": tasks})
+		c.HTML(http.StatusOK, "task.html", gin.H{"tasks": tasks}) //faltou informar oq precisa no /tasks
 	})
 
 	//adicionar tarefa
@@ -63,7 +63,7 @@ func main() {
 			mu.Lock()
 			lastID++
 			task := Task{ID: lastID, Text: text, Complete: false}
-			tasks = append(tasks, task)
+			tasks = append(tasks, task) //adiciona a lista, mas continua dando erros
 			mu.Unlock()
 			// c.HTML(http.StatusOK, "task.html", gin.H{"task": task})
 			c.HTML(http.StatusOK, "task.html", gin.H{"ID": task.ID, "Text": task.Text, "Complete": task.Complete})
