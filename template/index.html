@@ -1,0 +1,35 @@
+{{ define "index.html" }}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <!-- Contém informações invisíveis, como o título da aba do navegador e scripts -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerenciador de Tarefas</title>
+
+    <!-- Carrega bibliotecas externas -->
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/hrmx.org"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white shadow-lg p-6 w-96 rounded-lg">
+        <h1 class="text-xl font-bold mb-4">Lista de Tarefas</h1>
+
+        <!-- Formulário para adicionar tarefa -->
+        <form hx-post="/add" hx-target="#tasks" hx-swap="beforeend" class="flex space-x-2 mb-4">
+            <input type="text" name="text" placeholder="Nova tarefa" class="border p-2 rounded flex-grow">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Adicionar</button>
+        </form>
+
+        <!-- Lista de tarefas -->
+        <ul id="tasks" hx-get="/tasks" hx-trigger="every 2s" hx-target="#tasks" hx-swap="innerHTML">
+            {{ range .tasks }}
+                {{ template "task.html" . }}
+            {{ end }} 
+        </ul>
+    </div>
+</body>
+</html>
+{{ end }}
