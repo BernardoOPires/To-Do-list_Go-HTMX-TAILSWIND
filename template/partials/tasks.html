@@ -1,0 +1,5 @@
+{{ define "tasks.html" }}
+    {{ range .tasks }}
+        {{ template "task.html" . }}
+    {{ end }}
+{{ end }}

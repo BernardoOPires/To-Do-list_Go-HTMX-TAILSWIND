@@ -18,16 +18,14 @@
         <h1 class="text-xl font-bold mb-4">Lista de Tarefas</h1>
 
         <!-- Formulário para adicionar tarefa -->
-        <form hx-post="/add" hx-target="#tasks" hx-swap="beforeend" class="flex space-x-2 mb-4">
+        <form hx-post="/add" hx-target="#tasksList" hx-swap="beforeend" class="flex space-x-2 mb-4">
             <input type="text" name="text" placeholder="Nova tarefa" class="border p-2 rounded flex-grow">
             <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Adicionar</button>
         </form>
 
-        <!-- Lista de tarefas -->
-        <ul id="tasks" hx-get="/tasks" hx-trigger="every 2s" hx-target="#tasks" hx-swap="innerHTML">
-            {{ range .tasks }}
-                {{ template "task.html" . }}
-            {{ end }} 
+        <!-- Lista de tarefas     esta puxando do local errado               -->
+        <ul id="tasksList" hx-get="/tasks" hx-trigger="every 4s" hx-target="#tasksList" hx-swap="innerHTML">
+        
         </ul>
     </div>
 </body>

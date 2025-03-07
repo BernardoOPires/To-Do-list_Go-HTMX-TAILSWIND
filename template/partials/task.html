@@ -1,6 +1,6 @@
 {{ define "task.html" }}
 <li id="task-{{ .ID }}" class="flex justify-between items-center bg-gray-200 p-2 rounded mb-2">
-    <span class="{{ if .Complete }}line-through text-gray-500{{ end }}">{{ .text }}</span>
+    <span class="{{ if .Complete }}line-through text-gray-500{{ end }}">{{ .Text }}</span>  <!-- ✅ Garante que o texto aparece -->
 
     <div class="flex space-x-2">
         <!-- Botão de concluir -->
@@ -17,9 +17,7 @@
             hx-delete="/remove/{{ .ID }}" 
             hx-target="#task-{{ .ID }}"   
             hx-swap="delete" 
-            class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
-            data-hx-swap-oob="true"
-            data-hrmx="fadeOut">
+            class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700">
             ❌
         </button>
     </div>
