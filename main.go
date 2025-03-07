@@ -53,7 +53,11 @@ func main() {
 	})
 
 	r.GET("/tasks", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "task.html", gin.H{"tasks": tasks}) //faltou informar oq precisa no /tasks
+		for _, task := range tasks {
+			fmt.Println("Tarefa:", task.ID, task.Text) // 🔍 Verifique se o ID está correto
+		} // a lista esta salvando
+		c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks}) //estou passando uma lista para tasks q carrega o text de uma so
+		//passe apenas uma task passe isso tudo pelo html
 	})
 
 	//adicionar tarefa
