@@ -24,9 +24,14 @@
         </form>
 
         <!-- Lista de tarefas     esta puxando do local errado               -->
-        <ul id="tasksList" hx-get="/tasks" hx-trigger="every 4s" hx-target="#tasksList" hx-swap="innerHTML">
-        
+        <ul id="tasksList" hx-get="/tasks" hx-trigger="every 10s" hx-target="#tasksList" hx-swap="innerHTML">
         </ul>
+
+        <!--hx-encoding=multipart/form-data faz suportar upload de arquivos pelo ajax-->
+        <form hx-post="/upload" hx-encoding="multipart/form-data" hx-target="#taskList" hx-swap="innerHTML">
+        <input type="file" name="file" accept=".csv" class="border p-2 rounded">   
+        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Upload CSV</button> 
+        </form>
     </div>
 </body>
 </html>
