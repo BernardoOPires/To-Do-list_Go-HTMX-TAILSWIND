@@ -83,7 +83,7 @@ func main() {
 			if id == fmt.Sprintf("%d", tasks[i].ID) {
 				tasks[i].Complete = !tasks[i].Complete //Alterna entre concluído/não concluído
 				// Renderiza o HTML atualizado da tarefa para substituir no front-end via HTMX
-				c.HTML(http.StatusOK, "partials/task.html", gin.H{"task": tasks[i], "oob": true})
+				c.HTML(http.StatusOK, "task.html", gin.H{"task": tasks[i], "oob": true})
 				return
 			}
 		}
