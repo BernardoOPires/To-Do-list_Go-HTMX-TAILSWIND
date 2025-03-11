@@ -6,6 +6,7 @@ package main
 //tailwing
 
 import (
+	"encoding/csv"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/xuri/excelize/v2"
 )
 
 type Task struct {
@@ -104,10 +106,96 @@ func main() {
 		c.String(http.StatusNotFound, "Tarefa não encontrada")
 	})
 
-	//teste para debug
-	// for _, tmpl := range r.HTMLRender.Instance("").(*gin.Template).Templates() {
-	// 	fmt.Println("Template carregado:", tmpl.Name())
-	// }
+	//somnete o texto é necessario no csv, e deve estar na primeira coluna
+	r.POST("/upload", func(c *gin.Context) {
+		//passo 1 - obtenha o arquivo
+		file, err := c.FormFile("file")
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao carregar o arquivo")
+			return
+		}
+
+		//passo 2 - abrir o arquivo
+		openedFile, err := file.Open()
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao abrir o arquivo")
+		}
+		defer openedFile.Close() //fecha o arquivo ao terminar a execução da função
+
+		//passo 3 - ler o arquivo(csv)
+		reader := csv.NewReader(openedFile)
+		records, err := reader.ReadAll() //slice de cada linha do arquivo
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao ler o arquivo(csv)")
+		}
+
+		//passo 4 - converter os registros para tarefas
+		// bloqueia o acesso a variavel tasks durante o processo,
+		// fazendo com que somente uma go routine possa modificar a tasks por vez
+		mu.Lock()
+		defer mu.Unlock()
+		for _, record := range records {
+			lastID++
+			task := Task{
+				ID:       lastID,
+				Text:     record[0],
+				Complete: false,
+			}
+			tasks = append(tasks, task)
+		}
+
+		//passo 5 - retornar a lista atualizada
+		c.HTML(http.StatusOK, "task.html", gin.H{"task": tasks})
+	})
+
+	r.POST("/upload-excel", func(c *gin.Context) {
+		print("entrada")
+		//passo 1 - obtenha o arquivo
+		file, err := c.FormFile("file")
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao carregar o arquivo")
+			return
+		}
+
+		//passo 2 - abrir o arquivo
+		openedFile, err := file.Open()
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao abrir o arquivo excel")
+		}
+		defer openedFile.Close() //fecha o arquivo ao terminar a execução da função
+
+		//passo 3 - ler o arquivo(excel)
+		tempFilePath := "temp.xlsx"
+		err = c.SaveUploadedFile(file, tempFilePath)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao salvar o arquivo excel temporario")
+		}
+
+		excelFile, err := excelize.OpenFile(tempFilePath)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro ao ler os arquivo")
+		}
+
+		// so deve ter o texto na primeira coluna no arquivo
+		sheetName := excelFile.GetSheetName(0)
+		rows, err := excelFile.GetRows(sheetName)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Erro no processamento das rows")
+		}
+
+		for _, row := range rows {
+			if len(row) > 0 {
+				lastID++
+				task := Task{
+					ID:       lastID,
+					Text:     row[0],
+					Complete: false,
+				}
+				tasks = append(tasks, task)
+			}
+		}
+		c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks})
+	})
 	r.Run(":8080")
 }
 func loadTemplates(root string) (files []string, err error) {
