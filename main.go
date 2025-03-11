@@ -55,10 +55,7 @@ func main() {
 	})
 
 	r.GET("/tasks", func(c *gin.Context) {
-		for _, task := range tasks {
-			fmt.Println("Tarefa:", task.ID, task.Text) // 🔍 Verifique se o ID está correto
-		} // a lista esta salvando
-		c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks}) //estou passando uma lista para tasks q carrega o text de uma so
+		c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks})
 		//passe apenas uma task passe isso tudo pelo html
 	})
 
@@ -71,7 +68,6 @@ func main() {
 			task := Task{ID: lastID, Text: text, Complete: false}
 			tasks = append(tasks, task) //adiciona a lista, mas continua dando erros
 			mu.Unlock()
-			// c.HTML(http.StatusOK, "task.html", gin.H{"task": task})
 			c.HTML(http.StatusOK, "task.html", gin.H{"ID": task.ID, "Text": task.Text, "Complete": task.Complete})
 		}
 	})
@@ -83,9 +79,12 @@ func main() {
 		defer mu.Unlock()
 		for i := range tasks {
 			if id == fmt.Sprintf("%d", tasks[i].ID) {
-				tasks[i].Complete = !tasks[i].Complete //Alterna entre concluído/não concluído
-				// Renderiza o HTML atualizado da tarefa para substituir no front-end via HTMX
-				c.HTML(http.StatusOK, "task.html", gin.H{"task": tasks[i], "oob": true})
+				tasks[i].Complete = !tasks[i].Complete
+				//erro era que passava uma lista e n a task em si,
+				//  ao adicionar a task espesifica para ser passada, a tarefa atualiza da forma correta
+				task := tasks[i]
+				c.HTML(http.StatusOK, "task.html", gin.H{"ID": task.ID, "Text": task.Text, "Complete": task.Complete, "oob": true})
+
 				return
 			}
 		}
