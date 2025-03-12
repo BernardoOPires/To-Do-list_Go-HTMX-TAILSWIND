@@ -12,9 +12,17 @@
     <script src="https://unpkg.com/hrmx.org"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
+<header class="w-full bg-blue-500 text-white py-4 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
+    <h1 class="text-tg font-bold">Gerenciador de tarefas</h1>
+    <nav class="space-x8">
+      <a href="/" class="hover:underline">Inicio</a>
+      <a href="/calender" class="hover:underline">Agenda</a>
+      <a href="/list" class="hover:underline">Tarefas</a>
+      <a href="/contatos" class="hover:underline">Contatos</a>
+    </nav>
+</header>
 <body class="bg-gradient-to-r from-blue-400 to-purple-500 flex justify-center items-center min-h-screen">
-    <div class="bg-white shadow-lg p-6 w-96 rounded-lg border border-gray-200"> <!--container-->
+    <div class="bg-white shadow-lg p-6 w-3/4 h-2/3 rounded-lg border border-gray-200"> <!--container-->
         <h1 class="text-xl font-bold mb-4 text-center">Lista de Tarefas</h1>
 
         <!-- Formulário para adicionar tarefa -->
@@ -33,13 +41,11 @@
         <!--hx-encoding=multipart/form-data faz suportar upload de arquivos pelo ajax-->
         <form hx-post="/upload-excel" enctype="multipart/form-data" hx-target="#tasksList" hx-swap="innerHTML"
             class="flex items-center gap-2 bg-white p-4 rounded-lg shadow-md border border-gray-300">
-            <span class="mr-2">📂</span>
             <label class="flex items-center w-full bg-gray-100 border border-gray-300 rounded-lg px-3 cursor-pointer">
             <input type="file" name="file" accept=".xlsx" class="hidden" id="fileInput">
-            <span id="fileInput" class="text-gray-500">Escolher arquivo</span>
-
-            <button type="submit" class="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-2">Enviar Excel</button>
+            <span id="fileInput" class="text-gray-500">Escolher arquivo</span>   
             </label>
+            <button type="submit" class="bg-green-500 text-white px-5 py-2 w-1/5 h-1/6 rounded-lg hover:bg-green-600 transition flex items-center gap-2"> 📂 Enviar Excel </button>
         </form>
     </div>
 </body>
