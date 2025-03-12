@@ -32,7 +32,7 @@ func main() {
 	r := gin.Default()
 
 	// Carregar todos os templates da pasta "template/"
-	templateFiles, err := loadTemplates("template/")
+	templateFiles, err := loadTemplates("../front_end/template/")
 	if err != nil {
 		panic(err)
 	}
