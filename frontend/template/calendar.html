@@ -1,7 +1,6 @@
 {{ define "calendar" }}
 <!DOCTYPE html>
 <html lang="pt">
-
 <head>
     <!-- Contém informações invisíveis, como o título da aba do navegador e scripts -->
     <meta charset="UTF-8">
@@ -16,40 +15,38 @@
 <header class="w-full bg-blue-500 text-white py-4 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
     <h1 class="text-tg font-bold">Gerenciador de tarefas</h1>
     <nav class="space-x8">
-        <a href="/" class="hover:underline">Inicio</a>
-        <a href="/calender" class="hover:underline">Agenda</a>
-        <a href="/list" class="hover:underline">Tarefas</a>
+      <a href="/" class="hover:underline">Inicio</a>
+      <a href="/calender" class="hover:underline">Agenda</a>
+      <a href="/list" class="hover:underline">Tarefas</a>
     </nav>
 </header>
-
 <body>
-    <div class="max-w-md mx-auto p-4">
-        <div class="flex justify-between items-center mb-4">
+  <div class="max-w-md mx-auto p-4">
+    <div class="flex justify-between items-center mb-4">
             <button hx="/calendario?month={{.PreviousMonth}}" hx-target="#calendario">&lt;</button>
             <div class="font-bold">{{.Month}}{{.Year}}</div>
             <button hx="/calendario?month={{.NextMonth}}" hx-target="#calendario">&gt;</button>
-        </div>
-        <div class="grid grid-cols-7 gap-1 text-center font-semibold">
-            <div>Domingo</div>
-            <div>Segunda</div>
-            <div>Terça</div>
-            <div>Quarta</div>
-            <div>Quinta</div>
-            <div>Sexta</div>
-            <div>Sabado</div>
-        </div>
-
-        <div class="grid grid-cols-7 gap-1 text-center">
-            {{ range $i := .EmptyDays }}
-            <div></div>
-            {{ end }}
-
-            {{ range &day := .Days }}
-            <div class="p-2 hover:bg-gray-200 cursor-pointer rounded">{{ &day }}</div>
-            {{ end }}
-        </div>
     </div>
-</body>
+    <div class="grid grid-cols-7 gap-1 text-center font-semibold">
+       <div>Domingo</div>
+       <div>Segunda</div>
+       <div>Terça</div>
+       <div>Quarta</div>
+       <div>Quinta</div>
+       <div>Sexta</div>
+       <div>Sabado</div>
+    </div>
 
-</html>
+    <div class="grid grid-cols-7 gap-1 text-center">
+      {{ range $i := .EmptyDays }}
+         <div></div>
+      {{ end }}
+
+      {{ range $day := .Days }}
+         <div class="p-2 hover:bg-gray-200 cursor-pointer rounded">{{ $day }}</div>
+      {{ end }}
+    </div>
+  </div>
+</body>
+ </html>
 {{ end }}
