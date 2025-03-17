@@ -1,0 +1,26 @@
+{{ define "task.html" }}
+<li id="task-{{ .ID }}"
+ class="flex justify-between items-center bg-gray-100 p-3 rounded-lg shadow-sm mb-2 border border-gray-300 transition hover:shadow-mb">
+    <span class="{{ if .Complete }}line-through text-gray-500{{ end }} font-medium">{{ .Text }}</span> 
+
+    <div class="flex space-x-2">
+        <!-- Botão de concluir -->
+        <button
+            hx-patch="/complete/{{ .ID }}"
+            hx-target="#task-{{ .ID }}"
+            hx-swap="outerHTML"
+            class="bg-green-500 text-white px-2 py-1 rounded-lg hover:bg-green-700 transition">
+            ✔
+        </button>
+
+        <!-- Botão de remover -->
+        <button
+            hx-delete="/delete/{{ .ID }}" 
+            hx-target="#task-{{ .ID }}"   
+            hx-swap="delete" 
+            class="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-700 transition">
+            ❌
+        </button>
+    </div>
+</li>
+{{ end }}

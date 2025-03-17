@@ -1,0 +1,57 @@
+{{ define "index.html" }}
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <!-- Contém informações invisíveis, como o título da aba do navegador e scripts -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gerenciador de Tarefas</title>
+
+    <!-- Carrega bibliotecas externas -->
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/hrmx.org"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<header class="w-full bg-blue-500 text-white py-4 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
+    <h1 class="text-tg font-bold">Gerenciador de tarefas</h1>
+    <nav class="space-x8">
+        <a href="/" class="hover:underline">Inicio</a>
+        <a href="/calender" class="hover:underline">Agenda</a>
+        <a href="/list" class="hover:underline">Tarefas</a>
+    </nav>
+</header>
+
+<body class="bg-gradient-to-r from-blue-400 to-purple-500 flex justify-center items-center min-h-screen">
+    <div class="bg-white shadow-lg p-6 w-3/4 h-2/3 rounded-lg border border-gray-200"> <!--container-->
+        <h1 class="text-xl font-bold mb-4 text-center">Lista de Tarefas</h1>
+
+        <!-- Formulário para adicionar tarefa -->
+        <form hx-post="/add" hx-target="#tasksList" hx-swap="beforeend" class="flex gap-2 mb-4">
+            <input type="text" name="text" placeholder="Nova tarefa"
+                class="border p-2 rounded-lg flex-grow focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                ➕ Adicionar
+            </button>
+        </form>
+
+        <!-- Lista de tarefas     esta puxando do local errado               -->
+        <ul id="tasksList" hx-get="/tasks" hx-trigger="every 10s" hx-target="#tasksList" hx-swap="innerHTML">
+        </ul>
+
+        <!--hx-encoding=multipart/form-data faz suportar upload de arquivos pelo ajax-->
+        <form hx-post="/upload-excel" enctype="multipart/form-data" hx-target="#tasksList" hx-swap="innerHTML"
+            class="flex items-center gap-2 bg-white p-4 rounded-lg shadow-md border border-gray-300">
+            <label class="flex items-center w-full bg-gray-100 border border-gray-300 rounded-lg px-3 cursor-pointer">
+                <input type="file" name="file" accept=".xlsx" class="hidden" id="fileInput">
+                <span id="fileInput" class="text-gray-500">Escolher arquivo</span>
+            </label>
+            <button type="submit"
+                class="bg-green-500 text-white px-5 py-2 w-1/5 h-1/6 rounded-lg hover:bg-green-600 transition flex items-center gap-2">
+                📂 Enviar Excel </button>
+        </form>
+    </div>
+</body>
+
+</html>
+{{ end }}
