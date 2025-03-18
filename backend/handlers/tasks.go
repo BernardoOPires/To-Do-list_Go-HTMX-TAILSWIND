@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"backend/models"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -15,6 +16,10 @@ func ListTasks(c *gin.Context) {
 	models.Mu.Lock()
 	tasks := models.Tasks
 	models.Mu.Unlock()
+
+	for i, task := range tasks {
+		fmt.Printf("Task %d: ID = %v\n", i, task.ID)
+	}
 
 	c.HTML(http.StatusOK, "task.html", gin.H{"tasks": tasks})
 }
@@ -33,6 +38,24 @@ func AddTask(c *gin.Context) {
 	models.Mu.Unlock()
 
 	c.HTML(http.StatusOK, "task.html", task)
+}
+
+func DelTask(c *gin.Context) {
+	TaskID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.String(http.StatusInternalServerError, "id invalido")
+		return
+	}
+
+	for i, task := range tasks {
+		if task.ID == TaskID {
+			tasks = append(tasks[:i], tasks[i+1:]...)
+			c.String(http.StatusOK, "Tarefa removida") // mude o task.html para o caminho correto
+			return
+		}
+	}
+
+	c.String(http.StatusInternalServerError, "Tarefa não encontrada")
 }
 
 func CompleteTask(c *gin.Context) {

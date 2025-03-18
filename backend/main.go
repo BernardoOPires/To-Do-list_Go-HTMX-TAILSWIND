@@ -38,10 +38,19 @@ func main() {
 	// Definir o template no Gin
 	r.SetHTMLTemplate(templ)
 
+	//tarefas e funções a adicionar
+	//pesquisar por tarefa
+	//filtrar tarefas
+	//deletar todas as tarefas, com confirmação
+	//marcar mais de uma por vez
+	//agendar e aceitar arquivo
+	//receber arquivo xtls e carregar as tarefas dele
+
 	r.GET("/", handlers.LoadIndex)
-	r.GET("/tasks", handlers.ListTasks)
-	r.POST("/add", handlers.AddTask)
-	r.PATCH("/complete/:id", handlers.CompleteTask)
+	r.GET("/getTasks", handlers.ListTasks)
+	r.POST("/add", handlers.AddTask) //post pq muda completamente o valor, add
+	r.DELETE("/delete/:id", handlers.DelTask)
+	r.PATCH("/complete/:id", handlers.CompleteTask) //path pq muda um valor de uma variavel, mudança parcial
 
 	r.GET("/calendario", handlers.CalendarHandler)
 
