@@ -31,11 +31,13 @@ func AddTask(c *gin.Context) {
 		return
 	}
 
-	models.Mu.Lock()
-	lastID++
-	task := models.Task{ID: lastID, Text: text, Complete: false}
-	tasks = append(tasks, task)
-	models.Mu.Unlock()
+	task := models.AddTask(text)
+
+	// models.Mu.Lock()
+	// lastID++
+	// task := models.Task{ID: lastID, Text: text, Complete: false}
+	// tasks = append(tasks, task)
+	// models.Mu.Unlock()
 
 	c.HTML(http.StatusOK, "task.html", task)
 }
@@ -47,13 +49,15 @@ func DelTask(c *gin.Context) {
 		return
 	}
 
-	for i, task := range tasks {
-		if task.ID == TaskID {
-			tasks = append(tasks[:i], tasks[i+1:]...)
-			c.String(http.StatusOK, "Tarefa removida") // mude o task.html para o caminho correto
-			return
-		}
-	}
+	models.DelTask(TaskID)
+
+	// for i, task := range tasks {
+	// 	if task.ID == TaskID {
+	// 		tasks = append(tasks[:i], tasks[i+1:]...)
+	// 		c.String(http.StatusOK, "Tarefa removida") // mude o task.html para o caminho correto
+	// 		return
+	// 	}
+	// }
 
 	c.String(http.StatusInternalServerError, "Tarefa não encontrada")
 }
@@ -65,13 +69,15 @@ func CompleteTask(c *gin.Context) {
 		return
 	}
 
-	for i, task := range tasks {
-		if task.ID == TaskID {
-			tasks[i].Complete = !tasks[i].Complete
-			c.HTML(http.StatusOK, "task.html", tasks[i]) // mude o task.html para o caminho correto
-			return
-		}
-	}
+	models.CompleteTask(TaskID)
+
+	// for i, task := range tasks {
+	// 	if task.ID == TaskID {
+	// 		tasks[i].Complete = !tasks[i].Complete
+	// 		c.HTML(http.StatusOK, "task.html", tasks[i]) // mude o task.html para o caminho correto
+	// 		return
+	// 	}
+	// }
 
 	c.String(http.StatusInternalServerError, "Tarefa não encontrada")
 }
