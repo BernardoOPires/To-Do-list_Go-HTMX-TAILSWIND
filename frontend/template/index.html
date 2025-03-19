@@ -16,8 +16,10 @@
 <header class="w-full bg-blue-500 text-white py-4 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
     <h1 class="text-tg font-bold">Gerenciador de tarefas</h1>
     <nav class="space-x8">
-        <a href="/task" class="hover:underline">Inicio</a>
-        <a href="/calender" class="hover:underline">Agenda</a>
+        <!-- Adicione uma pagina para programar uma tarefa para os msm dia todo mes ou para o msm dia toda semana -->
+        <!-- <a href="/task" class="hover:underline">Inicio</a> -->
+        <!-- mude o caminho dps -->
+        <a href="C:\work\workspace\To-Do-list_Go-HTMX-TAILSWIND\frontend\template\calendar.html" hx-get="" hx-target="#conteudo" hx-swap="innerHTML" class="hover:underline">Agenda</a>
     </nav>
 </header>
 
@@ -35,7 +37,7 @@
         </form>
 
         <!-- Lista de tarefas     esta puxando do local errado               -->
-        <ul id="tasksList" hx-get="/tasks" hx-trigger="every 10s" hx-target="#tasksList" hx-swap="innerHTML">
+        <ul id="tasksList" hx-get="/getTasks" hx-trigger="every 10s" hx-target="#tasksList" hx-swap="innerHTML">
         </ul>
 
         <!--hx-encoding=multipart/form-data faz suportar upload de arquivos pelo ajax-->
