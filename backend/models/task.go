@@ -28,15 +28,17 @@ func AddTask(newText string) Task { //começar com maiscula permite q a função
 	return newTask
 }
 
-func DelTask(id string) {
+func DelTask(id string) bool {
 	Mu.Lock()
 	defer Mu.Unlock()
+	var err bool = true
 	for i, task := range Tasks {
 		if id == fmt.Sprintf("%d", task.ID) {
 			Tasks = append(Tasks[:i], Tasks[i+1:]...)
+			err = false
 		}
 	}
-
+	return err
 }
 
 func CompleteTask(id string) Task {

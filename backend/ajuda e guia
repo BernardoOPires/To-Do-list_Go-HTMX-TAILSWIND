@@ -1,0 +1,7 @@
+Os models definem os modelos e a logica de negocio
+
+os handlers lidam com a requisição http
+
+e o main cuida das configs do sercidor e templates
+
+
