@@ -2,9 +2,7 @@ package handlers
 
 import (
 	"backend/models"
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,14 +12,12 @@ var lastID int
 
 func ListTasks(c *gin.Context) {
 	models.Mu.Lock()
-	tasks := models.Tasks
-	models.Mu.Unlock()
+	defer models.Mu.Unlock()
 
-	for i, task := range tasks {
-		fmt.Printf("Task %d: ID = %v\n", i, task.ID)
-	}
+	tasks := make([]models.Task, len(models.Tasks))
+	copy(tasks, models.Tasks)
 
-	c.HTML(http.StatusOK, "task.html", gin.H{"tasks": tasks})
+	c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks}) // o erro era q vc passou task.html que é um tarefa e n o loop de tasks q ia gerar a lista
 }
 
 func AddTask(c *gin.Context) {
@@ -33,51 +29,24 @@ func AddTask(c *gin.Context) {
 
 	task := models.AddTask(text)
 
-	// models.Mu.Lock()
-	// lastID++
-	// task := models.Task{ID: lastID, Text: text, Complete: false}
-	// tasks = append(tasks, task)
-	// models.Mu.Unlock()
-
 	c.HTML(http.StatusOK, "task.html", task)
 }
 
 func DelTask(c *gin.Context) {
-	TaskID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.String(http.StatusInternalServerError, "id invalido")
-		return
-	}
+	TaskID := c.Param("id")
 
 	models.DelTask(TaskID)
 
-	// for i, task := range tasks {
-	// 	if task.ID == TaskID {
-	// 		tasks = append(tasks[:i], tasks[i+1:]...)
-	// 		c.String(http.StatusOK, "Tarefa removida") // mude o task.html para o caminho correto
-	// 		return
-	// 	}
-	// }
-
-	c.String(http.StatusInternalServerError, "Tarefa não encontrada")
 }
 
 func CompleteTask(c *gin.Context) {
-	TaskID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.String(http.StatusInternalServerError, "id invalido")
-		return
+	TaskID := c.Param("id")
+
+	task := models.CompleteTask(TaskID)
+	if task.ID == 0 {
+		c.String(http.StatusInternalServerError, "Tarefa não encontrada")
 	}
 
-	models.CompleteTask(TaskID)
+	c.HTML(http.StatusOK, "task.html", task)
 
-	// for i, task := range tasks {
-	// 	if task.ID == TaskID {
-	// 		tasks[i].Complete = !tasks[i].Complete
-	// 		c.HTML(http.StatusOK, "task.html", tasks[i]) // mude o task.html para o caminho correto
-	// 		return
-	// 	}
-	// }
-
-	c.String(http.StatusInternalServerError, "Tarefa não encontrada")
 }
