@@ -2,13 +2,19 @@ package models
 
 import (
 	"fmt"
+	"mime/multipart"
 	"sync"
+	"time"
+
+	"github.com/xuri/excelize/v2"
 )
 
-type Task struct {
-	ID       int    `json:"id"`
-	Text     string `json:"text"`
-	Complete bool   `json:"complete"`
+type Task struct { //adicione data dps
+	ID       int       `json:"id"`
+	Text     string    `json:"text"`
+	Complete bool      `json:"complete"`
+	time     time.Time `json:"time"`
+	// date
 }
 
 // variavel global
@@ -18,7 +24,7 @@ var ( //use o var quando quiser delcarar variaveis globais
 	Mu     sync.Mutex
 )
 
-func AddTask(newText string) Task { //começar com maiscula permite q a função seja exportada
+func AddTask(newText string, time string) Task { //começar com maiscula permite q a função seja exportada
 	Mu.Lock()
 	defer Mu.Unlock()
 	LastID++
@@ -52,4 +58,30 @@ func CompleteTask(id string) Task {
 		}
 	}
 	return Task{}
+}
+
+func ExcelToTask(file multipart.File) error {
+	excelFile, err := excelize.OpenReader(file)
+	if err != nil {
+		return err
+	}
+
+	// so deve ter o texto na primeira coluna no arquivo
+	sheetName := excelFile.GetSheetName(0)
+	rows, err := excelFile.GetRows(sheetName)
+	if err != nil {
+		return err
+	}
+
+	var time string
+	for _, row := range rows {
+		if len(row) > 0 {
+			text := row[0]
+			// data = row[1]  // para dps
+			if text != "" {
+				AddTask(text, time)
+			}
+		}
+	}
+	return err
 }

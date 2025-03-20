@@ -51,6 +51,7 @@ func main() {
 	r.POST("/add", handlers.AddTask) //post pq muda completamente o valor, add
 	r.DELETE("/delete/:id", handlers.DelTask)
 	r.PATCH("/complete/:id", handlers.CompleteTask) //path pq muda um valor de uma variavel, mudança parcial
+	r.POST("/upload-excel", handlers.UploadExcelHandler)
 
 	r.GET("/calendario", handlers.CalendarHandler)
 

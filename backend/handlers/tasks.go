@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/xuri/excelize/v2"
 )
 
 func ListTasks(c *gin.Context) {
@@ -20,12 +19,13 @@ func ListTasks(c *gin.Context) {
 
 func AddTask(c *gin.Context) {
 	text := c.PostForm("text")
+	time := c.PostForm("time")
 	if text == "" {
 		c.String(http.StatusBadRequest, "Texto não pode ser vazio")
 		return
 	}
 
-	task := models.AddTask(text)
+	task := models.AddTask(text, time)
 
 	c.HTML(http.StatusOK, "task.html", task)
 }
@@ -65,39 +65,15 @@ func UploadExcelHandler(c *gin.Context) {
 	openedFile, err := file.Open()
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Erro ao abrir o arquivo excel")
+		return
 	}
 	defer openedFile.Close() //fecha o arquivo ao terminar a execução da função
 
-	//passo 3 - ler o arquivo(excel)
-	tempFilePath := "temp.xlsx"
-	err = c.SaveUploadedFile(file, tempFilePath)
+	err = models.ExcelToTask(openedFile)
 	if err != nil {
-		c.String(http.StatusInternalServerError, "Erro ao salvar o arquivo excel temporario")
+		c.String(http.StatusInternalServerError, "Erro processar excel para task")
+		return
 	}
-
-	excelFile, err := excelize.OpenFile(tempFilePath)
-	if err != nil {
-		c.String(http.StatusInternalServerError, "Erro ao ler os arquivo")
-	}
-
-	// so deve ter o texto na primeira coluna no arquivo
-	sheetName := excelFile.GetSheetName(0)
-	rows, err := excelFile.GetRows(sheetName)
-	if err != nil {
-		c.String(http.StatusInternalServerError, "Erro no processamento das rows")
-	}
-
-	for _, row := range rows {
-		if len(row) > 0 {
-			lastID++
-			task := Task{
-				ID:       lastID,
-				Text:     row[0],
-				Complete: false,
-			}
-			tasks = append(tasks, task)
-		}
-	}
-	c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks})
+	c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": models.Tasks})
 
 }
