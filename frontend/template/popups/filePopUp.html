@@ -1,0 +1,30 @@
+{{ define "PopUp" }}
+<button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    Upload File
+</button>
+
+<div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h2 class="text-lg font-semibold mb-4">Upload File Parameters</h2>
+        
+        <label class="block mb-2 text-sm text-gray-700">File</label>
+        <div class="flex items-center border rounded px-2">
+            <input type="text" value="file1.json" readonly
+                class="flex-grow p-2 focus:outline-none">
+            <button class="text-gray-500 hover:text-blue-600 p-2">
+                📎
+            </button>
+            <button class="text-gray-500 hover:text-red-600 p-2">
+                ❌
+            </button>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-6">
+            <button onclick="document.getElementById('uploadModal').classList.add('hidden')"
+                class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">Cancel</button>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">OK</button>
+        </div>
+    </div>
+</div>
+{{ end }}
