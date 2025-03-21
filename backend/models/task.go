@@ -38,9 +38,9 @@ func DelTask(id string) bool {
 	Mu.Lock()
 	defer Mu.Unlock()
 	var err bool = true
-	for i, task := range Tasks {
+	for index, task := range Tasks {
 		if id == fmt.Sprintf("%d", task.ID) {
-			Tasks = append(Tasks[:i], Tasks[i+1:]...)
+			Tasks = append(Tasks[:index], Tasks[index+1:]...)
 			err = false
 		}
 	}
@@ -51,10 +51,10 @@ func CompleteTask(id string) Task {
 	Mu.Lock()
 	defer Mu.Unlock()
 
-	for i, task := range Tasks {
+	for index, task := range Tasks {
 		if fmt.Sprintf("%d", task.ID) == id {
-			Tasks[i].Complete = !Tasks[i].Complete //n atualizava pq vc esqueceu de colocar o c.html
-			return Tasks[i]
+			Tasks[index].Complete = !Tasks[index].Complete //n atualizava pq vc esqueceu de colocar o c.html
+			return Tasks[index]
 		}
 	}
 	return Task{}
