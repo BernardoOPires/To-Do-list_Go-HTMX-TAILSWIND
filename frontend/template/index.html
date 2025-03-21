@@ -14,6 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="scripts/scripts.js"></script>
 </head>
+
 <header class="w-full bg-blue-500 text-white py-4 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
     <h1 class="text-tg font-bold">Gerenciador de tarefas</h1>
     <nav class="space-x8">
@@ -26,7 +27,7 @@
 </header>
 
 <body class="bg-gradient-to-r from-blue-400 to-purple-500 flex justify-center items-center min-h-screen">
-    <div class="bg-white shadow-lg p-6 w-3/4 h-2/3 rounded-lg border border-gray-200">
+    <div class="bg-white shadow-lg p-6 w-3/4 h-2/3 rounded-lg border border-gray-300">
         <h1 class="text-xl font-bold mb-4 text-center">Lista de Tarefas</h1>
         <!-- -->
         <!-- esse trecho esta passando do header ao adicionar mtas tarefas -->
@@ -64,10 +65,11 @@
                     <option>Baixa</option>
                 </select>
 
-                <button type="button" onclick="abrirPopup()"
+                {{ template "PopUp" . }}
+                <!-- <button type="button" onclick="document.getElementById('uploadModal').showModal()"
                     class="border p-2 rounded-lg text-gray-700 hover:text-blue-600 hover:border-blue-400 transition">
                     📂 Upload
-                </button>
+                </button> -->
             </div>
         </form>
 
