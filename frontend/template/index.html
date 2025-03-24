@@ -28,16 +28,13 @@
 <body class="bg-gradient-to-r from-blue-400 to-purple-500 flex justify-center items-center min-h-screen overflow-hidden">
     <div class="bg-white p-6 mt-20 mb-20 w-3/4 max-h-[calc(100vh-160px)]">
         <h1 class="text-xl font-bold mb-4 text-center">Lista de Tarefas</h1>
-        <!-- -->
-        <!-- esse trecho esta passando do header ao adicionar mtas tarefas -->
-        <!-- -->
         <div class="flex justify-center">
         <form hx-post="/add" hx-target="#tasksList" hx-swap="beforeend" class="w-full flex flex-col gap-2 p-2"
         onsubmit="return this.text.value.trim() !== ''">
             <div class="flex gap-2">
                 <input type="text" name="text" placeholder="Nova tarefa"
                     class="flex-grow border p-2 rounded-lg min-w-[200px] focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
-
+                    
                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                     ➕ Adicionar
                 </button>
@@ -50,17 +47,8 @@
                 <input type="time"
                     class="border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
 
-                <select class="border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
-                    <option>Categoria</option> <!-- Torne dinâmico dps-->
-                    <option>Trabalho</option>
-                    <option>Estudo</option>
-                    <option>Lazer</option>
-                    <option>Saude</option>
-                    <option>Outros</option>
-                </select>
-
                 <select class="border p-2 rounded-lg w-[14%] focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
-                    <option>Prioridade</option> <!-- Torne dinâmico dps-->
+                    <option>Prioridade</option> 
                     <option>Alta</option>
                     <option>Media</option>
                     <option>Baixa</option>

@@ -7,6 +7,7 @@ package main
 
 import (
 	"backend/handlers"
+	"backend/models"
 	"fmt"
 	"html/template"
 	"os"
@@ -18,6 +19,11 @@ import (
 func main() {
 	r := gin.Default()
 
+	funcMap := template.FuncMap{
+		"getDate": models.GetDate,
+		"getTime": models.GetTime,
+	}
+
 	// Carregar todos os templates da pasta "template/"
 	templateFiles, err := loadTemplates("../frontend/template/")
 	if err != nil {
@@ -27,7 +33,7 @@ func main() {
 	fmt.Println("Templates encontrados:", templateFiles) //templates para debug
 
 	// Criar um novo template do Go
-	templ := template.New("")
+	templ := template.New("").Funcs(funcMap)
 
 	// Adicionar arquivos ao template
 	templ, err = templ.ParseFiles(templateFiles...)

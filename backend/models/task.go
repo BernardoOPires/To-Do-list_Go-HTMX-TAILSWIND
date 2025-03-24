@@ -13,8 +13,8 @@ type Task struct { //adicione data dps
 	ID       int       `json:"id"`
 	Text     string    `json:"text"`
 	Complete bool      `json:"complete"`
-	time     time.Time `json:"time"`
-	// date
+	DateTime time.Time `json:"datetime"`
+	Priority int       `json:"priority"`
 }
 
 // variavel global
@@ -87,4 +87,12 @@ func ExcelToTask(file multipart.File) error {
 	}
 
 	return err
+}
+
+func GetDate(date time.Time) string {
+	return date.Format("02/01/2006")
+}
+
+func GetTime(time time.Time) string {
+	return time.Format("15:04")
 }
