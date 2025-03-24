@@ -12,10 +12,9 @@
     <script src="https://unpkg.com/htmx.org"></script>
     <script src="https://unpkg.com/hrmx.org"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="scripts/scripts.js"></script>
 </head>
 
-<header class="w-full bg-blue-500 text-white py-4 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
+<header class="w-full bg-blue-500 text-white py-4 md-20 px-6 fixed top-0 left-0 shadow-md flex justify-between items-center">
     <h1 class="text-tg font-bold">Gerenciador de tarefas</h1>
     <nav class="space-x8">
         <!-- Adicione uma pagina para programar uma tarefa para os msm dia todo mes ou para o msm dia toda semana -->
@@ -26,13 +25,15 @@
     </nav>
 </header>
 
-<body class="bg-gradient-to-r from-blue-400 to-purple-500 flex justify-center items-center min-h-screen">
-    <div class="bg-white shadow-lg p-6 w-3/4 h-2/3 rounded-lg border border-gray-300">
+<body class="bg-gradient-to-r from-blue-400 to-purple-500 flex justify-center items-center min-h-screen overflow-hidden">
+    <div class="bg-white p-6 mt-20 mb-20 w-3/4 max-h-[calc(100vh-160px)]">
         <h1 class="text-xl font-bold mb-4 text-center">Lista de Tarefas</h1>
         <!-- -->
         <!-- esse trecho esta passando do header ao adicionar mtas tarefas -->
         <!-- -->
-        <form hx-post="/add" hx-target="#tasksList" hx-swap="beforeend" class="flex flex-col gap-2 p-2">
+        <div class="flex justify-center">
+        <form hx-post="/add" hx-target="#tasksList" hx-swap="beforeend" class="w-full flex flex-col gap-2 p-2"
+        onsubmit="return this.text.value.trim() !== ''">
             <div class="flex gap-2">
                 <input type="text" name="text" placeholder="Nova tarefa"
                     class="flex-grow border p-2 rounded-lg min-w-[200px] focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
@@ -50,7 +51,7 @@
                     class="border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
 
                 <select class="border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
-                    <option>Categoria</option> <!-- Torne dinâmico-->
+                    <option>Categoria</option> <!-- Torne dinâmico dps-->
                     <option>Trabalho</option>
                     <option>Estudo</option>
                     <option>Lazer</option>
@@ -58,35 +59,19 @@
                     <option>Outros</option>
                 </select>
 
-                <select class="border p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
-                    <option>Prioridade</option> <!-- Torne dinâmico -->
+                <select class="border p-2 rounded-lg w-[14%] focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+                    <option>Prioridade</option> <!-- Torne dinâmico dps-->
                     <option>Alta</option>
                     <option>Media</option>
                     <option>Baixa</option>
                 </select>
-
-                {{ template "PopUp" . }}
-                <!-- <button type="button" onclick="document.getElementById('uploadModal').showModal()"
-                    class="border p-2 rounded-lg text-gray-700 hover:text-blue-600 hover:border-blue-400 transition">
-                    📂 Upload
-                </button> -->
             </div>
         </form>
-
-        <ul id="tasksList" hx-get="/getTasks" hx-trigger="every 10s" hx-target="#tasksList" hx-swap="innerHTML">
+        {{ template "PopUp" . }} <!-- botão de envio excel-->
+    </div>
+        <ul id="tasksList" hx-get="/getTasks" hx-trigger="every 10s" hx-target="#tasksList" hx-swap="innerHTML"
+        class="mt-4 pb-6 max-h-[45vh] overflow-auto flex-grow">
         </ul>
-
-        <!--hx-encoding=multipart/form-data faz suportar upload de arquivos pelo ajax-->
-        <!-- <form hx-post="/upload-excel" enctype="multipart/form-data" hx-target="#tasksList" hx-swap="innerHTML"
-            class="flex items-center gap-2 bg-white p-4 rounded-lg shadow-md border border-gray-300">
-            <label class="flex items-center w-full bg-gray-100 border border-gray-300 rounded-lg px-3 cursor-pointer">
-                <input type="file" name="file" accept=".xlsx" class="hidden" id="fileInput">
-                <span id="fileInput" class="text-gray-500">Escolher arquivo</span>
-            </label>
-            <button type="submit"
-                class="bg-green-500 text-white px-5 py-2 w-1/5 h-1/6 rounded-lg hover:bg-green-600 transition flex items-center gap-2">
-                📂 Enviar Excel </button>
-        </form> -->
     </div>
 </body>
 

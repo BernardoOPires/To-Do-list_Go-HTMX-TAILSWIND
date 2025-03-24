@@ -1,25 +1,30 @@
 {{ define "PopUp" }}
 <button onclick="document.getElementById('uploadModal').showModal()"
-    class="border p-2 rounded-lg text-gray-700 hover:text-blue-600 hover:border-blue-400 transition">
+    class="border p-2 mb-2 rounded-lg text-gray-700 hover:text-blue-600 hover:border-blue-400 transition">
     📂 Upload
 </button>
 
-<dialog id="uploadModal" class="p-6 rounded shadow-md w-[80%] max-x-md">
+<dialog id="uploadModal" class="p-6 rounded shadow-md w-full max-w-md">
     <h2 class="text-lg font-semibold mb-4">Upload File Parameters</h2>
+
     <form hx-post="/upload-excel" enctype="multipart/form-data" hx-target="#tasksList" hx-swap="innerHTML"
-        class="flex items-center gap-2 bg-white p-4 rounded-lg shadow-md border border-gray-300">
-        <label class="flex items-center w-full bg-gray-100 border border-gray-300 rounded-lg px-3 cursor-pointer">
-            <input type="file" name="file" accept=".xlsx" class="hidden" id="fileInput">
-            <span id="fileInput" class="text-gray-500">Escolher arquivo</span>
+    hx-on="htmx:afterRequest: document.getElementById('uploadModal').close()"
+        class="flex flex-col gap-4 bg-white w-full p-4 rounded-lg shadow-md border border-gray-300">
+
+        <label class="flex flex-col gap-2">
+            <span class="text-gray-700 font-medium">Selecione um arquivo excel</span>
+            <input type="file" name="file" accept=".xlsx"  
+            class="border p-2 rounded focus:outline-none w-full focus:ring-2 focus:ring-blue-400 transition" id="fileInput">
         </label>
 
-        <div class="flex justify-end gap-2 mt-6">
-            <button onclick="document.getElementById('uploadModal').close()"
+        <div class="flex flex-col gap-2">
+            <button type="buttom" onclick="document.getElementById('uploadModal').close()"
                 class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">Cancel</button>
-            <button type="submit" onclick="document.getElementById('uploadModal').close()"
-                class="bg-green-500 text-white px-5 py-2 w-1/7 h-1/6 rounded-lg hover:bg-green-600 transition flex items-center gap-2">
-                📂 Enviar Excel </button>
-        </div>
-    </form>
+                <button type="submit" 
+                    class="bg-green-500 text-white px-5 py-2 justify-center rounded-lg hover:bg-green-600 transition flex items-center gap-2">
+                    📂 Enviar Excel </button>
+            </div>
+        </form>
 </dialog>
 {{ end }}
+

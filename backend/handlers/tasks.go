@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"backend/models"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,7 @@ func ListTasks(c *gin.Context) {
 func AddTask(c *gin.Context) {
 	text := c.PostForm("text")
 	time := c.PostForm("time")
+	fmt.Println("CHAMOU /add com:", text)
 	if text == "" {
 		c.String(http.StatusBadRequest, "Texto não pode ser vazio")
 		return
@@ -34,7 +36,7 @@ func DelTask(c *gin.Context) {
 	TaskID := c.Param("id")
 
 	err := models.DelTask(TaskID)
-	if err == false {
+	if !err {
 		c.Status(http.StatusOK)
 		return
 	}
@@ -74,6 +76,7 @@ func UploadExcelHandler(c *gin.Context) {
 		c.String(http.StatusInternalServerError, "Erro processar excel para task")
 		return
 	}
-	c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": models.Tasks})
+	tasks := make([]models.Task, len(models.Tasks))
+	c.HTML(http.StatusOK, "tasks.html", gin.H{"tasks": tasks})
 
 }

@@ -73,15 +73,18 @@ func ExcelToTask(file multipart.File) error {
 		return err
 	}
 
-	var time string
+	// var time string
 	for _, row := range rows {
 		if len(row) > 0 {
 			text := row[0]
 			// data = row[1]  // para dps
 			if text != "" {
-				AddTask(text, time)
+				LastID++
+				Tasktemp := Task{ID: LastID, Text: text, Complete: false}
+				Tasks = append(Tasks, Tasktemp)
 			}
 		}
 	}
+
 	return err
 }
