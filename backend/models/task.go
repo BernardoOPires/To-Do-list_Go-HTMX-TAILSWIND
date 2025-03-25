@@ -14,7 +14,7 @@ type Task struct { //adicione data dps
 	Text     string    `json:"text"`
 	Complete bool      `json:"complete"`
 	DateTime time.Time `json:"datetime"`
-	Priority int       `json:"priority"`
+	Priority string    `json:"priority"`
 }
 
 // variavel global
@@ -24,14 +24,45 @@ var ( //use o var quando quiser delcarar variaveis globais
 	Mu     sync.Mutex
 )
 
-func AddTask(newText string, time string) Task { //começar com maiscula permite q a função seja exportada
+func AddTask(newText string, taskTime string, date string, priority string) (Task, error) {
 	Mu.Lock()
 	defer Mu.Unlock()
+	//Revise o modo como esta sendo feito para deixar mais eficiente apos terminar a proxima função a ser adicionada
+	year, month, day := 0, time.January, 1
+	hour, minute := 0, 0
+	var err error
+
+	if date != "" {
+		parsedDate, parseErr := time.Parse("02/01/2006", date)
+		if parseErr != nil {
+			err = parseErr
+		} else {
+			year, month, day = parsedDate.Date()
+		}
+	}
+
+	if taskTime != "" {
+		parsedTime, parseErr := time.Parse("15:04", taskTime)
+		if parseErr != nil {
+			err = parseErr
+		} else {
+			hour, minute, _ = parsedTime.Clock()
+		}
+	}
+
+	finalDateTime := time.Date(year, month, day, hour, minute, 0, 0, time.Local)
+
 	LastID++
-	newTask := Task{ID: LastID, Text: newText, Complete: false}
+	newTask := Task{
+		ID:       LastID,
+		Text:     newText,
+		DateTime: finalDateTime,
+		Priority: priority,
+		Complete: false,
+	}
 	Tasks = append(Tasks, newTask)
 
-	return newTask
+	return newTask, err
 }
 
 func DelTask(id string) bool {

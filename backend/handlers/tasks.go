@@ -21,13 +21,15 @@ func ListTasks(c *gin.Context) {
 func AddTask(c *gin.Context) {
 	text := c.PostForm("text")
 	time := c.PostForm("time")
+	date := c.PostForm("date")
+	priority := c.PostForm("priority")
 	fmt.Println("CHAMOU /add com:", text)
 	if text == "" {
 		c.String(http.StatusBadRequest, "Texto não pode ser vazio")
 		return
 	}
 
-	task := models.AddTask(text, time)
+	task, err := models.AddTask(text, time, date, priority)
 
 	c.HTML(http.StatusOK, "task.html", task)
 }
